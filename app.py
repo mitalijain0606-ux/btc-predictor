@@ -161,7 +161,7 @@ def get_live_data():
     # Get real-time ticker
     live_price = None
     try:
-        r = requests.get("https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT", timeout=5)
+        r = requests.get("https://data-api.binance.vision/api/v3/ticker/price?symbol=BTCUSDT", timeout=5)
         live_price = float(r.json()["price"])
     except:
         pass
