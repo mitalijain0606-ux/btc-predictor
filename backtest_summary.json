@@ -1,0 +1,10 @@
+{
+  "generated_at": "2026-05-01T12:48:50.171745+00:00",
+  "n_predictions": 720,
+  "coverage_95": 0.95,
+  "mean_width": 1333.2449305555551,
+  "mean_winkler_95": 2207.59048611111,
+  "vol_window": 24,
+  "n_sims": 10000,
+  "confidence": 0.975
+}

@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+*.pyc
+prediction_history.jsonl
+backtest_results.jsonl
+.DS_Store
+.env
