@@ -155,11 +155,21 @@ def is_duplicate(rec, hist):
 
 @st.cache_data(ttl=55, show_spinner=False)
 def get_live_data():
-    return fetch_btc_bars(limit=505)
+    import requests
+    # Get model data
+    df = fetch_btc_bars(limit=505)
+    # Get real-time ticker
+    live_price = None
+    try:
+        r = requests.get("https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT", timeout=5)
+        live_price = float(r.json()["price"])
+    except:
+        pass
+    return df, live_price
 
 with st.spinner("Fetching Live Market Data..."):
     try:
-        df = get_live_data()
+        df, live_ticker = get_live_data()
     except Exception as e:
         st.error(f"Binance fetch failed: {e}")
         st.stop()
@@ -275,9 +285,13 @@ with col_l:
 
     st.markdown(f"""
     <div class="price-panel glass-panel">
-      <div class="price-now-label">BTC / USDT · Current Price</div>
+      <div class="price-now-label">BTC / USDT · Model Baseline Price</div>
       <div class="price-now-val">{fp(current_price)}</div>
       <div class="{chg_cls}">{arrow} {abs(pct_change):.3f}% from previous bar</div>
+      <div style="margin-top:16px; padding-top:16px; border-top:1px dashed rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.1em; color:#8B949E; text-transform:uppercase;">Live Ticker Price (Real-time)</span>
+        <span style="font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.05em; color:{'#3FB950' if live_ticker and live_ticker > current_price else '#F85149'}; text-shadow: 0 0 10px rgba(255,255,255,0.1);">{fp(live_ticker) if live_ticker else "—"}</span>
+      </div>
     </div>
 
     <div class="range-panel glass-panel">
